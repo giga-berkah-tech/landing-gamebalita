@@ -1,29 +1,34 @@
-# Stage 1: Build
+# ---- Base image (builder) ----
 FROM node:18-alpine AS builder
 
+# Set work directory
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
-# Copy source code
+# Copy seluruh source code
 COPY . .
 
-# Build static site
+# Build Next.js
 RUN npm run build
 
-# Stage 2: Production
-FROM nginx:alpine
+# ---- Production image ----
+FROM node:18-alpine AS runner
+WORKDIR /app
 
-# Copy built static files
-COPY --from=builder /app/out /usr/share/nginx/html
+ENV NODE_ENV=production
 
-# Copy nginx config (optional, buat custom config)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy only the necessary output
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
 
-EXPOSE 80
+EXPOSE 3000
 
-CMD ["nginx", "-g", "daemon off;"]
+# Jalankan Next.js
+CMD ["npm", "start"]
