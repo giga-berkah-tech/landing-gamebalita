@@ -55,5 +55,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Image digest
-        run: echo ${{ steps.meta.outputs.tags }}
+      - name: Show built image tags
+        run: |
+          echo "✅ Image berhasil di-build dan di-push!"
+          echo "📦 Tags yang dibuat:"
+          echo "${{ steps.meta.outputs.tags }}"
