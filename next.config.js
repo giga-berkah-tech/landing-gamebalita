@@ -2,7 +2,7 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  output: 'export',
+  // output: 'export',
 
   // Optional: Change links `/me` -> `/me/` and emit `/me.html` -> `/me/index.html`
   // trailingSlash: true,
@@ -11,7 +11,14 @@ const nextConfig = {
   // skipTrailingSlashRedirect: true,
 
   // Optional: Change the output directory `out` -> `dist`
-  distDir: 'out',
+  // distDir: 'out',
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    });
+    return config;
+  },
 };
 
 module.exports = nextConfig;

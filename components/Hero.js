@@ -2,9 +2,9 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 import Slider from 'react-slick';
+import ArrowNext from './misc/ArrowNext';
+import ArrowBack from './misc/ArrowBack';
 
-import ArrowBack from '../public/assets/Icon/eva_arrow-back-fill.svg';
-import ArrowNext from '../public/assets/Icon/eva_arrow-next-fill.svg';
 const listImage = [
   { id: 1, image: '/assets/About.png', alt: 'Screenshoot Menu' },
   { id: 2, image: '/assets/ss-1.png', alt: 'Screenshoot Kategori' },
@@ -72,7 +72,6 @@ const Hero = ({}) => {
                     quality={100}
                     width={612}
                     height={383}
-                    layout="responsive"
                     className="rounded-md"
                     key={list.id}
                   />

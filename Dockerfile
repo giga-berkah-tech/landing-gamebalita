@@ -5,16 +5,16 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies with Yarn
+RUN yarn install --frozen-lockfile
 
 # Copy seluruh source code
 COPY . .
 
 # Build Next.js
-RUN npm run build
+RUN yarn build
 
 # ---- Production image ----
 FROM node:18-alpine AS runner
@@ -23,7 +23,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Copy only the necessary output
-COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/package.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
@@ -31,4 +31,4 @@ COPY --from=builder /app/node_modules ./node_modules
 EXPOSE 3000
 
 # Jalankan Next.js
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
